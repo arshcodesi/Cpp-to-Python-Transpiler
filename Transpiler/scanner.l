@@ -1,8 +1,6 @@
 %option yylineno
 %{
-/* prologue */
-
-	#include <stdlib.h>
+       #include <stdlib.h>
 	#include "parser.tab.h"
 	#include "ast.h" 
 	#include <stdio.h>
@@ -10,24 +8,21 @@
 	#include "symtab.h"
 	#include "translation.h"
 	#include "utils.h"
-
-	extern int yylineno;
+        extern int yylineno;
 	extern void debug_token(const char *token_name, const char *token_value);
-
 #define YY_DECL int yylex(void)
 %}
 
-stdio           (std::)
+stdio               (std::)
 delim		    [ \t]
-ws 			    {delim}+
+ws 		    {delim}+
 digit 		    [0-9]
-int_number      [0]+|-?[1-9][0-9]*
-float_number 	-?{digit}+(\.{digit}+)?(E[+-]?{digit}+)?
-letter 		    [A-Za-z]
-id 			    {letter}({letter}|{digit})*
+int_number          [0]+|-?[1-9][0-9]*
+float_number 	    -?{digit}+(\.{digit}+)?(E[+-]?{digit}+)?
+letter 	    [A-Za-z]
+id 		    {letter}({letter}|{digit})*
 bool_v		    true|false
 string_v	    \"[^\"]*\"
-
 %x 							comment
 %x 							commentsl
 %x 							library
@@ -36,23 +31,23 @@ string_v	    \"[^\"]*\"
 %%
 
 "/*" 						BEGIN(comment);
-<comment>[^*\n]* 			/* eat anything that's not a '*' */
-<comment>"*"+[^*/\n]* 		/* eat up '*'s not followed by '/'s */
-<comment>\n 				/* possible new lines */
-<comment>"*"+"/" 			BEGIN(INITIAL);
+<comment>[^*\n]* 			
+<comment>"*"+[^*/\n]* 		
+<comment>\n 				
+<comment>"*"+"/" 		        	BEGIN(INITIAL);
 "//" 						BEGIN(commentsl);
-<commentsl>[^\n]* 			/* eat anything that's not a new line */
-<commentsl>\n 				BEGIN(INITIAL);
+<commentsl>[^\n]* 			
 "#" 						BEGIN(library);
-<library>[^\n]* 			/* eat anything that's not a new line */
-<library>\n 				BEGIN(INITIAL);
-"using namespace std;"		BEGIN(namespacestd);
-<namespacestd>[^\n]* 		/* eat anything that's not a new line */
-<namespacestd>\n 			BEGIN(INITIAL);
+<library>[^\n]* 			
+<library>\n 				        BEGIN(INITIAL);
+"using namespace std;"	               	BEGIN(namespacestd);
+<namespacestd>[^\n]* 		
+<namespacestd>\n 			        BEGIN(INITIAL);
 
 
 "if" 		{debug_token("IF", "if"); printf("KEYWORD 'IF' found at line %d.\n",yylineno);return(IF);}
-"else" 		{debug_token("ELSE", "else"); printf("KEYWORD 'ELSE' found at line %d.\n",yylineno);return(ELSE);}
+"else" 	{debug_token("ELSE", "else"); printf("KEYWORD 'ELSE' found at line %d.\n",yylineno);return(ELSE);}
+"while"     {debug_token("WHILE", "while"); printf("KEYWORD 'WHILE' found at line %d.\n",yylineno);return(WHILE);}
 "float" 	{debug_token("FLOAT", "float"); printf("KEYWORD 'FLOAT' found at line %d.\n",yylineno);return(FLOAT) ;}
 "int" 		{debug_token("INT", "int"); printf("KEYWORD 'INT' found at line %d.\n",yylineno);return(INT);}
 "bool"		{debug_token("BOOL", "bool"); printf("KEYWORD 'BOOL' found at line %d.\n",yylineno);return(BOOL);}
@@ -79,7 +74,7 @@ string_v	    \"[^\"]*\"
 ":" 		{debug_token("COLON", ":"); yylval.string=strdup(yytext);return(COLON);}
 ";" 		{debug_token("SEMICOLON", ";"); yylval.string=strdup(yytext);return(SEMICOLON);}
 "," 		{debug_token("COMMA", ","); yylval.string=strdup(yytext);return(COMMA);}
-"."			{debug_token("DOT", "."); yylval.string=strdup(yytext);return(DOT);}
+"."		{debug_token("DOT", "."); yylval.string=strdup(yytext);return(DOT);}
 "+" 		{debug_token("PLUS", "+"); printf("OPERATOR '+' found at line %d.\n",yylineno);yylval.string=strdup(yytext);return(ADD);}
 "++" 		{debug_token("INCREMENT", "++"); printf("OPERATOR '++' found at line %d.\n",yylineno);yylval.string=strdup(yytext);return(INC);}
 "-" 		{debug_token("MINUS", "-"); printf("OPERATOR '-' found at line %d.\n",yylineno);yylval.string=strdup(yytext);return(SUB);}
@@ -93,9 +88,9 @@ string_v	    \"[^\"]*\"
 "\n"        {/* no action and no return */}
 
 {ws} 		    {/* no action and no return */}
-{stdio}		    {/* no action and no return */}
-{int_number} 	{yylval.string=strdup(yytext); printf("INT NUMBER '%s' found at line %d.\n",yylval.string,yylineno); 	return(INT_NUMBER) ;}
-{float_number} 	{yylval.string=strdup(yytext); printf("FLOAT NUMBER '%s' found at line %d.\n",yylval.string,yylineno); return(FLOAT_NUMBER) ;}
+{stdio}             {/* no action and no return */}
+{int_number} 	    {yylval.string=strdup(yytext); printf("INT NUMBER '%s' found at line %d.\n",yylval.string,yylineno); 	return(INT_NUMBER) ;}
+{float_number}      {yylval.string=strdup(yytext); printf("FLOAT NUMBER '%s' found at line %d.\n",yylval.string,yylineno); return(FLOAT_NUMBER) ;}
 {bool_v}	    {yylval.string=strdup(yytext); printf("BOOL VALUE '%s' found at line %d.\n",yylval.string,yylineno); 	return(BOOL_V) ;}
 {id} 		    {yylval.string=strdup(yytext); printf("ID '%s' found at line %d.\n",yylval.string,yylineno); 			return(ID) ;}
 {string_v}	    {yylval.string=strdup(yytext); printf("STRING '%s' found at line %d.\n",yylval.string,yylineno); 		return(STRING_V) ;}

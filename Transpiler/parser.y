@@ -1,24 +1,19 @@
 %{
-/****************** Prologue *****************/ 
-	#include <math.h>
-	#include <stdio.h>
-	#include <ctype.h>
+    #include <math.h>
+    #include <stdio.h>
+    #include <ctype.h>
     #include <string.h>
-	#include "symtab.h"
+    #include "symtab.h"
     #include "ast.h" 
     #include "translation.h"
     #include "utils.h"
     #include <stdbool.h>
-
     int yylex (void);
     int yyerror(char *s);
     int n_error = 0;
     extern int yylineno;
     extern FILE *yyin;
-    // Pointer to file used for translation
     FILE *fptr;
-
-/****************** Initialization of structs, counters and variables*****************/ 
     struct AST_Node_Statements  *root;
     struct SymTab *local_table  = NULL; 
     struct AST_Node_Class       *class_array[100]       = { NULL };
@@ -29,10 +24,7 @@
     int function_counter = 0;
     bool found = false;
     bool in_class = false;
-    // This is a helper function to distinguish class methods from regular functions
     bool is_inside_class = false;
-
-    // Add cleanup function
     void cleanup_arrays() {
         for (int i = 0; i < class_counter; i++) {
             if (class_array[i] != NULL) {
@@ -64,46 +56,52 @@
     void scope_enter();
     void scope_exit();
     
+
+#include "parser.tab.h"
 %}
 
-    //%define parse.error verbose
-    //%debug
+%union {
+    int intval;
+    float floatval;
+    char* strval;
+}
 
-    %token SEMICOLON
-	%token IF 
-	%token ELSE
-	%token ID
-	%token INT_NUMBER   
-	%token FLOAT_NUMBER
-    %token INT
-	%token FLOAT
-	%token STRING
-	%token BOOL
-    %token LPAR
-    %token RPAR
-    %token LBRACE
-    %token RBRACE
-    %token COLON
-    %token COMMA
-    %token DOT
-    %token BRACKETS
-	%token RETURN
-	%token COUT
-	%token CIN
-	%token STRING_V
-    %token BOOL_V
-	%token FOR
-    %token FUNCTION
-    %token CLASS
-    %token MAIN
-    %token PRIVATE
-    %token PUBLIC
-    %token UNKNOWN
-    %token EQ AND OR ADD SUB MUL DIV GT LT GE LE EEQ NE INC DEC
-    %token LSHIFT RSHIFT
- 
-/****************** types *****************/ 
-    %define api.value.type {union yystype}
+
+
+%token SEMICOLON
+%token IF 
+%token ELSE
+%token INT
+%token FLOAT
+%token STRING
+%token BOOL
+%token LPAR
+%token RPAR
+%token LBRACE
+%token RBRACE
+%token COLON
+%token COMMA
+%token DOT
+%token BRACKETS
+%token RETURN
+%token COUT
+%token CIN
+%token STRING_V
+%token BOOL_V
+%token FOR
+%token FUNCTION
+%token CLASS
+%token MAIN
+%token PRIVATE
+%token PUBLIC
+%token UNKNOWN
+%token EQ AND OR ADD SUB MUL DIV GT LT GE LE EEQ NE INC DEC
+%token LSHIFT RSHIFT
+%token WHILE
+
+/* Define start symbol, precedence, etc., below this */
+%%
+
 
     %type <string>          ID STRING FLOAT_NUMBER INT_NUMBER FLOAT INT BOOL LPAR RPAR LBRACE RBRACE COLON SEMICOLON COMMA DOT BRACKETS RETURN COUT CIN STRING_V BOOL_V FOR FUNCTION CLASS UNKNOWN AND OR ADD SUB MUL DIV GT LT GE LE EEQ NE MAIN PRIVATE PUBLIC EQ INC DEC
     %type <statements>      statements body program sections section
@@ -126,6 +124,7 @@
     %type <CBodyNode>       class_body
     %type <objectNode>      create_object access_class
     %type <data_type> types
+    %type <whileNode>       while_loop
 
     %start program
 %%  
@@ -418,6 +417,13 @@
                 $$->value.classNode = $1;
                 debug_print("Class inheritance statement created", $$);
             }
+        |   while_loop {
+            debug_print("Creating statement from while_loop", NULL);
+            $$ = (struct AST_Node_Instruction*)malloc(sizeof(struct AST_Node_Instruction));
+            $$->n_type = WHILE_NODE;
+            $$->value.whileNode = $1;
+            debug_print("While loop statement created", $$);
+        }
         ;
 
     
@@ -1509,6 +1515,17 @@
         |   INT     { $$ = DATA_TYPE_INT; }
         |   STRING  { $$ = DATA_TYPE_STRING; }
         |   BOOL    { $$ = DATA_TYPE_BOOL; };
+
+    while_loop:
+        WHILE LPAR expr RPAR LBRACE statements RBRACE 
+        {
+            debug_print("Creating while loop node", NULL);
+            $$ = (struct AST_Node_While*)malloc(sizeof(struct AST_Node_While));
+            $$->condition = $3;
+            $$->body = $6;
+            debug_print("While loop node created", $$);
+        }
+        ;
 %%
 
 /****************** Functions *****************/ 

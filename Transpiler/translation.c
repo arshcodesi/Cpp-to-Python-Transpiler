@@ -361,13 +361,10 @@ char *translate_instruction(struct AST_Node_Instruction *instr, int indent_level
         }
         
         case WHILE_NODE: {
-            struct AST_Node_While *while_node = (struct AST_Node_While *)instr->value.statements;
-            struct AST_Node_Expression *expr = (struct AST_Node_Expression *)while_node->condition;
-            char *condition = translate_operand(expr->left_op);
-            char *body = translate_statements(while_node->body, indent_level + 1);
-            asprintf(&result, "%swhile %s:\n%s", indent, condition, body);
-            free(condition);
-            free(body);
+            struct AST_Node_While *while_node = (struct AST_Node_While *)instr->value.whileNode;
+            if (while_node) {
+                translate_while(while_node);
+            }
             break;
         }
         
@@ -1188,4 +1185,48 @@ char *translate_assignment(struct AST_Node_Assign *assign) {
     }
     
     return result;
+}
+
+void translate_while(struct AST_Node_While *while_node) {
+    if (!while_node) return;
+    
+    // Print indentation
+    print_indent(indent_counter);
+    
+    // Start the while statement
+    printf("while ");
+    
+    // Translate the condition
+    if (while_node->condition) {
+        struct AST_Node_Expression *condition = (struct AST_Node_Expression *)while_node->condition;
+        char *cond_str = translate_operand(condition->left_op);
+        if (condition->op && condition->right_op) {
+            char *op = condition->op;
+            if (strcmp(op, "&&") == 0) op = "and";
+            else if (strcmp(op, "||") == 0) op = "or";
+            char *right_str = translate_operand(condition->right_op);
+            printf("%s %s %s", cond_str, op, right_str);
+            free(right_str);
+        } else {
+            printf("%s", cond_str);
+        }
+        free(cond_str);
+    }
+    
+    printf(":\n");
+    
+    // Increase indentation for the body
+    indent_counter++;
+    
+    // Traverse the body statements
+    if (while_node->body) {
+        traverse(while_node->body);
+    } else {
+        // Empty body - add a pass statement
+        print_indent(indent_counter);
+        printf("pass\n");
+    }
+    
+    // Restore indentation
+    indent_counter--;
 } 

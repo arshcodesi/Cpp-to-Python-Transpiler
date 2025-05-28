@@ -62,6 +62,7 @@ union yystype {
     struct AST_Node_Else            *elseNode;
     struct AST_Node_Else_If         *elseIfNode;
     struct AST_Node_For             *forNode;
+    struct AST_Node_While           *whileNode;
     struct AST_Node_Operand         *operand;
     struct AST_Node_Return          *returnNode;
     struct AST_Node_Input           *inputNode;

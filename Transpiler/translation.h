@@ -19,6 +19,7 @@ void translate_if(struct AST_Node_If *if_statement);
 void translate_else_if(struct AST_Node_Else_If *else_if_statement);
 void translate_else(struct AST_Node_Else *else_statement);
 void translate_for(struct AST_Node_For *for_loop);
+void translate_while(struct AST_Node_While *while_loop);
 void translate_input(struct AST_Node_Input *input);
 void translate_output(struct AST_Node_Output *output);
 void translate_return(struct AST_Node_Return *return_node);
