@@ -223,8 +223,8 @@ struct AST_Node_FunctionDef{
 };
 
 struct AST_Node_Params{
-    struct AST_Node_Init    *decl_param;    // da usare in dichiarazione di funzione
-    struct AST_Node_Operand *call_param;    // da usare solo nella chiamata di funzione
+    struct AST_Node_Init    *decl_param;    
+    struct AST_Node_Operand *call_param;    
     struct AST_Node_Params  *next_param;
 
 };
