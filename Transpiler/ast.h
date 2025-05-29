@@ -396,18 +396,18 @@ struct AST_Node_Param {
     DATA_TYPE data_type;
 };
 
-// Parameter declaration node (for compatibility with ast.c)
+
 struct AST_Node_ParamDecl {
     char *param_name;
     DATA_TYPE data_type;
 };
 
-// Parameter call node (for compatibility with ast.c)
+
 struct AST_Node_ParamCall {
     struct AST_Node *value;
 };
 
-// While node
+
 struct AST_Node_While {
     struct AST_Node *condition;
     struct AST_Node_Statements *body;
