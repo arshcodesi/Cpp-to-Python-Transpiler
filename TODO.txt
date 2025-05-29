@@ -1,0 +1,4 @@
+TODO List:
+- Improve error handling for unknown node types.
+- Add support for more C++ constructs (switch, do-while).
+- Optimize expression translation for performance.

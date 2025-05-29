@@ -1,0 +1,4 @@
+Translation Notes:
+- This file contains notes related to code generation and output formatting.
+- Remember to handle indentation properly.
+- Check translation for loops, conditionals, and assignments carefully.

@@ -1,0 +1,4 @@
+Sample Test Case:
+- Input: a simple for loop in C++
+- Expected Output: equivalent Python for loop
+- Note: verify output indentation and syntax correctness.
