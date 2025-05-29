@@ -210,13 +210,13 @@ struct AST_Node_Assign {
 
 struct AST_Node_FunctionCall{
     char *func_name;
-    struct AST_Node_Params *params;  // parametri funzione
+    struct AST_Node_Params *params;  
     DATA_TYPE return_type;
 };
 
 struct AST_Node_FunctionDef{
     char *func_name;
-    struct AST_Node_Params *params;  // parametri funzione
+    struct AST_Node_Params *params;  
     DATA_TYPE return_type;
     struct AST_Node_FBody *f_body;
     bool is_class_method;  // Flag to indicate if this is a class method
