@@ -251,7 +251,7 @@ struct AST_Node_Break *new_break_node(void) {
     return node;
 }
 
-// Create new continue node
+
 struct AST_Node_Continue *new_continue_node(void) {
     struct AST_Node_Continue *node = (struct AST_Node_Continue *)malloc(sizeof(struct AST_Node_Continue));
     if (!node) {
@@ -276,7 +276,7 @@ struct AST_Node_BinOp *new_binop_node(struct AST_Node *left, char *op, struct AS
     return node;
 }
 
-// Create new unary operation node
+
 struct AST_Node_UnOp *new_unop_node(char *op, struct AST_Node *operand) {
     struct AST_Node_UnOp *node = (struct AST_Node_UnOp *)malloc(sizeof(struct AST_Node_UnOp));
     if (!node) {
@@ -289,7 +289,7 @@ struct AST_Node_UnOp *new_unop_node(char *op, struct AST_Node *operand) {
     return node;
 }
 
-// Create new number node
+
 struct AST_Node_Num *new_num_node(int value) {
     struct AST_Node_Num *node = (struct AST_Node_Num *)malloc(sizeof(struct AST_Node_Num));
     if (!node) {
@@ -301,7 +301,7 @@ struct AST_Node_Num *new_num_node(int value) {
     return node;
 }
 
-// Create new float node
+
 struct AST_Node_Float *new_float_node(float value) {
     struct AST_Node_Float *node = (struct AST_Node_Float *)malloc(sizeof(struct AST_Node_Float));
     if (!node) {
