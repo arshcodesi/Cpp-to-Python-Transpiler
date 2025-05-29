@@ -81,7 +81,7 @@ struct Symbol *find_symbol(char *name_sym, struct SymTab *table) {
     return symbol;
 }
 
-// Find symbol in all tables
+
 struct Symbol *find_symtab(char *name_sym, struct SymTab *table) {
     if (!name_sym) return NULL;
     
@@ -94,7 +94,7 @@ struct Symbol *find_symtab(char *name_sym, struct SymTab *table) {
     return NULL;
 }
 
-// Delete symbol from table
+
 void delete_symbol(struct Symbol *symbol, struct SymTab *table) {
     if (!symbol || !table) return;
     printf("[DEBUG] Deleting single symbol: %s (%p) from table %p\n", symbol->name_sym, symbol, table);
