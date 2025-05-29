@@ -261,8 +261,8 @@ struct AST_Node_For{
 struct AST_Node_Expression{
     DATA_TYPE expr_type;
     char *op;
-    struct AST_Node_Operand *left_op;  // left operand
-	struct AST_Node_Operand *right_op; // right operand
+    struct AST_Node_Operand *left_op;  
+	struct AST_Node_Operand *right_op; 
     
 };
 

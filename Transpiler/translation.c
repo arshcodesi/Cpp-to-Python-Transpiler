@@ -1013,7 +1013,7 @@ void translate_private_class_func_def(struct AST_Node_FunctionDef *func_def) {
     indent_counter++;
     traverse(func_def->f_body->func_body);
     
-    // Add appropriate return statement if needed
+    
     if (func_def->return_type == DATA_TYPE_NONE) {
         print_indent(indent_counter);
         fprintf(fptr, "return None\n");
@@ -1215,7 +1215,7 @@ void translate_while(struct AST_Node_While *while_node) {
     
     printf(":\n");
     
-    // Increase indentation for the body
+    
     indent_counter++;
     
     // Traverse the body statements
